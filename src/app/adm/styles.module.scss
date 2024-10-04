@@ -1,0 +1,48 @@
+.main{
+    padding: 100px 150px;
+    min-height: calc(100vh - 98px);
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 50px;
+    background-color: #F8F8FC;
+    padding: 30px;
+    border-radius: 16px;
+
+    .person{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .infoPerson{
+        display: flex;
+        gap: 20px;
+        align-items: center;
+
+        h1{
+            font-size: 20px;
+            font-weight: bolder;
+        }
+
+        .infoCursePerson{
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            p{
+                font-size: 16px;
+                color: #8F8F8F;
+            }
+        }
+    }
+
+    .line{
+        width: 100%;
+        height: 2px;
+        background-color: #DFDFDF;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+}
