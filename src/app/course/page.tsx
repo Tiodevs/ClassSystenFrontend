@@ -37,7 +37,11 @@ export default function Courses() {
                 }
             })
 
-            setAulaid(responseCourses.data[0].lessons[0].id)
+            if(responseCourses.data.length > 0){
+
+                setAulaid(responseCourses.data[0].lessons[0].id) 
+            }
+
 
             const resCategories: Course[] = responseCourses.data
 
