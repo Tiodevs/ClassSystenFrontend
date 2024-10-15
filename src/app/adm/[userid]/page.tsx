@@ -48,7 +48,7 @@ export default function EditUser({ params }: Props) {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                const coursesResponse = await api.post("/users/courseid",{
+                const coursesResponse = await api.post("/users/courseid", {
                     user_id: decodedId
                 }, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -60,7 +60,7 @@ export default function EditUser({ params }: Props) {
 
                 const resCourses = coursesResponse.data
 
-                
+
 
                 setUsers(filterUsers);
                 setCourses(coursesResponse.data);
@@ -72,8 +72,30 @@ export default function EditUser({ params }: Props) {
         fetchData();
     }, []);
 
-    if(courses.length > 0){
-        console.log(courses[0].course.name)
+    if (courses.length > 0) {
+        console.log(courses)
+    }
+
+    async function handleDeleteLesson(course: any) {
+
+        const token = getCookiesClient()
+
+        await api.delete("/users/course", {
+            params: {
+                usercurse_id: course
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .catch((err) => {
+                console.log(err)
+                return
+            })
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000); // Recarrega a página após 2 segundos
     }
 
     return (
@@ -101,15 +123,15 @@ export default function EditUser({ params }: Props) {
                 <EventsCardById userId={decodedId} />
 
                 <div className={styles.contentCourses}>
-                    {courses.map((item:any) => (
+                    {courses.map((item: any) => (
                         <div key={item.id} className={styles.course}>
                             <p>{item.course.name}</p>
-                            <Trash size={27} color="#FFFF" />
+                            <Trash size={27} color="#FFFF" onClick={() => handleDeleteLesson(item.id)} className={styles.btndelete} />
                         </div>
                     ))}
                 </div>
 
-                
+
             </main>
         </div>
     )
