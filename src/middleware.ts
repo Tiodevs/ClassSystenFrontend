@@ -14,37 +14,10 @@ export async function middleware(req:NextRequest) {
     //  Pega o token JWT nos cookies
     const token = getCookiesServer()
 
-    const myUser = await api.get("/me", {
-        headers:{
-            Authorization: `Bearer ${token}`
-        }
-    })
-
-    const listUsers = await api.get("/users",{
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-
-    const resListUsers = listUsers.data
-
-    const resMyUser = myUser.data
-
-    const usersActive = resListUsers.filter((item:any) => item.active === true)
-
-    const validetionUserActive = usersActive.filter((item:any) => item.id === resMyUser.id)
-
-    const usersADM = resListUsers.filter((item:any) => item.adm === true)
-
-    if(pathname.startsWith("/course") || pathname.startsWith("/events")){
+    if(pathname.startsWith("/course")){
 
         // Se não tiver um JWT ele manda para pagina de login
         if(!token){
-            return NextResponse.redirect(new URL("/", req.url))
-        }
-
-        // NÃO ESTA FUNCINANDO DIREITO, Se não encontrar o usuario ativo ele retorna
-        if(!validetionUserActive){
             return NextResponse.redirect(new URL("/", req.url))
         }
 
@@ -61,10 +34,6 @@ export async function middleware(req:NextRequest) {
 
         // Se não tiver um JWT ele manda para pagina de login
         if(!token){
-            return NextResponse.redirect(new URL("/", req.url))
-        }
-
-        if(usersADM[0].id !== resMyUser.id){
             return NextResponse.redirect(new URL("/", req.url))
         }
 

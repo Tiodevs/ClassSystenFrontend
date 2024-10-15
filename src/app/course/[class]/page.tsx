@@ -2,9 +2,19 @@ import { getCookiesServer } from "@/lib/cookieServer";
 import { Header } from "../../components/header";
 import { Title } from "../../components/title";
 import { api } from "../../services/api";
-import styles from './styles.module.scss'
-import { ClassContainer } from "./_components/class";
+import Image from "next/image";
 
+import styles from './styles.module.scss'
+import Link from "next/link";
+
+interface Courses {
+    id: string,
+    title: string,
+    content: any,
+    createdAt: string,
+    courseId: string,
+    progress: any
+}
 
 interface Course {
     id: string;
@@ -24,24 +34,27 @@ export default async function Class({ params }: Props) {
 
     const token = getCookiesServer()
 
+    const responseClass = await api.post<Courses[]>("/course/lessonbyid", {
+        course_id: decodedId
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+
+    const classes : Courses[] = responseClass.data
+
     const responseCourses = await api.get<Course[]>("/course", {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
+
     const resCurses: Course[] = responseCourses.data
+
     const filterCourse = resCurses.filter(item => item.id === decodedId)
 
-    const resUserId = await api.get("/me", {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-        
-
-    })
-
-    const userid = resUserId.data
-
+    console.log(classes)
 
     return (
         <div>
@@ -51,11 +64,19 @@ export default async function Class({ params }: Props) {
                     name01="Aulas"
                     name02= {filterCourse[0].name}
                 />
+                <div className={styles.content}>
+                    {classes.map((item: any) => (
+                        <Link href={`/course/${decodedId}/${item.id}`}>
+                            <div className={styles.div}>
+                                <h1>{item.title}</h1>
+                                
+                            </div>
 
-                <ClassContainer
-                    course_id={decodedId}
-                    user_id={userid.id}
-                />
+                            <div className={styles.line}></div>
+
+                        </Link>
+                    ))}
+                </div>
             </main>
         </div>
     )

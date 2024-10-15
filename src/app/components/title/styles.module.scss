@@ -1,46 +1,14 @@
 .TitleContent{
   color: #FFF;
 
-  p{
-    color: var(--textcinza);
-    font-size: 18px;
+  h2{
+    color: #8F8F8F;
+    font-size: 24px;
   }
 
   h1{
     color: #FFF;
-    font-size: 53px;
-    font-weight: lighter;
+    font-size: 44px;
   }
 }
 
-@media (max-width: 1000px){
-  .TitleContent{
-    color: #FFF;
-  
-    h2{
-      color: #8F8F8F;
-      font-size: 25px;
-    }
-  
-    h1{
-      color: #FFF;
-      font-size: 35px;
-    }
-  }
-}
-
-@media (max-width: 720px){
-  .TitleContent{
-    color: #FFF;
-  
-    h2{
-      color: #8F8F8F;
-      font-size: 25px;
-    }
-  
-    h1{
-      color: #FFF;
-      font-size: 35px;
-    }
-  }
-}
