@@ -1,4 +1,4 @@
-import { getCookiesServer } from "@/lib/cookieServer";
+"use client"
 import { Header } from "../components/header";
 import { Title } from "../components/title";
 import { api } from "../services/api";
@@ -6,6 +6,9 @@ import Image from "next/image";
 
 import styles from './styles.module.scss'
 import Link from "next/link";
+import { redirect } from "next/navigation"
+import { getCookiesClient } from "@/lib/cookieClient";
+import { useEffect, useState } from "react";
 
 interface Course {
     id: string;
@@ -13,40 +16,80 @@ interface Course {
     description: string;
     createdAt: string; // Pode usar Date se quiser trabalhar diretamente com objetos Date
     active: boolean;
+    lessons: any
 }
 
-export default async function Courses() {
+export default function Courses() {
 
-    const token = getCookiesServer()
+    const [courses, setCourses] = useState([])
+    const [aulaid, setAulaid] = useState("")
+    const [loading, setloading] = useState(true)
+    const [loading2, setloading2] = useState(false)
 
-    const responseCourses = await api.get<Course[]>("/course", {
-        headers: {
-            Authorization: `Bearer ${token}`
+    useEffect(() => {
+
+        async function getCurses() {
+            const token = getCookiesClient()
+
+            const responseCourses = await api.get<Course[]>("/course", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            setAulaid(responseCourses.data[0].lessons[0].id)
+
+            const resCategories: Course[] = responseCourses.data
+
+            // Filtra apenas os cursos que estão ativos
+            const activeCourses = resCategories.filter((course: Course) => course.active)
+
+            const getUserId = await api.get("/me", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            const userActive = await api.get("/users", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            const resUserActive = userActive.data
+
+            const filterUserActive = resUserActive.filter((item: any) => item.active === true)
+
+            const validetionUser = filterUserActive.filter((item: any) => item.id === getUserId.data.id)
+
+            const getCursesByUser = await api.post("/users/courseid", {
+                user_id: getUserId.data.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            const CursesByUser = getCursesByUser.data
+
+            let allfiltersCourses = CursesByUser.map((item: any) => activeCourses.filter((a: any) => a.id === item.courseId))
+
+            if (validetionUser.length === 0) {
+                redirect("/")
+            }
+
+            setCourses(allfiltersCourses)
+
         }
-    })
 
-    const resCategories: Course[] = responseCourses.data
+        getCurses()
 
-    // Filtra apenas os cursos que estão ativos
-    const activeCourses = resCategories.filter((course: Course) => course.active)
+        setloading(false)
 
-    const getUserId = await api.get("/me",{
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+        console.log("Resposta do curso: ", aulaid)
 
-    const getCursesByUser = await api.post("/users/courseid",{
-        user_id: getUserId.data.id
-    },{
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-
-    const CursesByUser = getCursesByUser.data
-    
-    const allfiltersCourses = CursesByUser.map((item: any) => activeCourses.filter((a: any) => a.id === item.courseId))
+        
+    }, []);
 
 
     return (
@@ -54,28 +97,30 @@ export default async function Courses() {
             <Header />
             <main className={styles.main}>
                 <Title
-                    name01="Cursos"
+                    name01="Veja todos os cursos que você esta matriculado aqui."
                     name02="Todos os seus cursos"
                 />
                 <div className={styles.content}>
-                    {allfiltersCourses.map((item: any) => (
-                        item.map((itemm:any) => (
-                            <Link href={`/course/${encodeURIComponent(itemm.id)}`}>
+                    {courses.length > 0 ? ( courses.map((item: any) => (
+                        item.map((itemm: any) => (
+
                             <div key={itemm.id}>
-                                <h1>{itemm.name}</h1>
                                 <Image
-                                    src={"/Cursos.png"}
+                                    src={itemm.banner}
                                     alt="Logo do curso"
                                     className={styles.logo}
-                                    width={200}
+                                    width={370}
                                     height={200}
                                     priority
                                 />
-                                <p>{itemm.description}</p>
+                                <Link href={`/course/${encodeURIComponent(itemm.id)}/${aulaid}`} className={styles.btn} onClick={()=> setloading2(true)}>
+                                    {loading2 ? "CARREGANDO..." : "ENTRAR NO CURSO"}
+                                </Link>
                             </div>
-                        </Link>
                         ))
-                    ))}
+                    ))) : (
+                        loading ? <p className={styles.loading}>Carregando...</p> : <p className={styles.loading}>Nenhum curso encontrado.</p>
+                    )}
                 </div>
             </main>
         </div>

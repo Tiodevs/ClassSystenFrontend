@@ -1,4 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+// font-family: "Bebas Neue", sans-serif;
+// font-family: "Manrope", sans-serif;
 
 
 * {
@@ -19,13 +24,19 @@
     --gray-100: #D9D9D9;
     --green-900: #3fffa3;
     --red-900: #ff3f4b;
-    
-    --main: #01C790
+
+    --textbranco: #FFFF;
+    --textcinza: #C7C7C7;
+    --cinza: #1A1A1A;
+    --fundopreto: #0f0f0f;
+    --main: #01DEB2;
 
 }
 
 button {
     cursor: pointer;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: bolder;
 }
 
 a {
@@ -33,9 +44,13 @@ a {
     text-decoration: none;
 }
 
+h1{
+    font-family: "Bebas Neue", sans-serif;
+}
+
 body {
-    background-color: var(--dark-700);
-    font-family: "Roboto", sans-serif;
+    background-color: var(--fundopreto);
+    font-family: "Manrope", sans-serif;
 }
 
 body,
@@ -43,6 +58,6 @@ input,
 textarea,
 select,
 button {
-    font-family: "Roboto", sans-serif;
+    font-family: "Manrope", sans-serif;
     font: 400 1rem sans-serif;
 }
