@@ -12,9 +12,10 @@ interface Props {
   name: string,
   event: number,
   courseid?: string, // Função opcional
+  userId?: string, // Função opcional
 }
 
-export function Button2({ name, event, courseid  }: Props) {
+export function Button2({ name, event, courseid, userId  }: Props) {
   const { pending } = useFormStatus();
 
   const router = useRouter();
@@ -24,7 +25,7 @@ export function Button2({ name, event, courseid  }: Props) {
   function redirect() {
     switch (event) {
       case 1:
-        router.push('/adm/usercourses');
+        router.push(`/adm/usercourses/${userId}`);
         break;
       case 2:
         router.push('/adm/createcourse');
@@ -36,7 +37,7 @@ export function Button2({ name, event, courseid  }: Props) {
         router.push(`/adm/createlesson/${courseid}`);
         break;
       case 5:
-        router.push('/adm/createevent');
+        router.push(`/adm/createevent/${userId}`);
         break;
       case 6:
         router.back();

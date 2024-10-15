@@ -1,5 +1,5 @@
 .container{
-  background-color: #FFFF;
+  background-color: var(--cinza);
   width: 100%;
   padding: 3px 30px;
   border-radius: 16px;
@@ -9,8 +9,16 @@
   justify-content: start;
   align-items: center;
 
+  .direita{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   h2{
     font-size: 18px;
+    color: var(--textbranco);
+    font-weight: lighter;
   }
 
   .iconevent{
@@ -28,10 +36,11 @@
   .event{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 13px;
     width: 100%;
     padding: 20px 0px;
-    border-bottom: solid 2px #DFDFDF;
+    border-bottom: solid 2px #484848;
   }
 
   .event:last-child{
