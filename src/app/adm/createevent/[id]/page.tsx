@@ -3,11 +3,8 @@
 import { InstagramIcon, Smartphone, Linkedin } from 'lucide-react'
 import styles from '../../../page.module.scss'
 import { redirect } from "next/navigation"
-import { Button2 } from "@/app/components/button2"
 import { getCookiesClient } from "@/lib/cookieClient"
 import { api } from "@/app/services/api"
-
-
 import { ChangeEvent, useState } from "react"
 
 
