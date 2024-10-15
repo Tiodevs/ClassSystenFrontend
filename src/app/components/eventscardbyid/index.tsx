@@ -6,11 +6,11 @@ import { Presentation, Clock, MapPin, Hourglass, Trash } from 'lucide-react'
 import { api } from '@/app/services/api'
 import { useEffect, useState } from 'react'
 
-interface Props{
+interface Props {
   userId: string
 }
 
-export function EventsCardById({userId}:Props) {
+export function EventsCardById({ userId }: Props) {
 
   const [events, setEvents] = useState<any[]>([])
 
@@ -22,11 +22,11 @@ export function EventsCardById({userId}:Props) {
 
     async function getEvents() {
 
-      const resEvents = await api.post("/course/events/list",{
-        data:{
+      const resEvents = await api.post("/course/events/list", {
+        data: {
           userId
         }
-      } ,{
+      }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +34,7 @@ export function EventsCardById({userId}:Props) {
 
       const listEvents = resEvents.data
 
-      const filterEvents = listEvents.filter((item:any) => item.userId === userId)
+      const filterEvents = listEvents.filter((item: any) => item.userId === userId)
 
       setEvents(filterEvents)
     }
@@ -42,10 +42,32 @@ export function EventsCardById({userId}:Props) {
     getEvents();
   }, []);
 
+  async function handleDeleteLesson(event_id: any) {
+
+    const token = getCookiesClient()
+
+    await api.delete("/course/events", {
+      params: {
+        event_id: event_id
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .catch((err) => {
+        console.log(err)
+        return
+      })
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000); // Recarrega a página após 2 segundos
+  }
+
 
   return (
     <div className={styles.container}>
-       {events.length > 0 ? (
+      {events.length > 0 ? (
         events.map((item: any) => (
           <div key={item.id} className={styles.event}>
             <div className={styles.direita}>
@@ -71,7 +93,7 @@ export function EventsCardById({userId}:Props) {
               </div>
             </div>
 
-            <Trash size={27} color="#FFFF" />
+            <Trash size={27} color="#FFFF" onClick={() => handleDeleteLesson(item.id)} className={styles.btndelete} />
 
           </div>
         ))
@@ -80,7 +102,7 @@ export function EventsCardById({userId}:Props) {
           <p>Nenhum evento encontrado.</p>
         </div>
       )}
-      
+
     </div>
   )
 }
