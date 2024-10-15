@@ -39,6 +39,8 @@ export default function UserCourse({ params }: Props) {
         fetchCourses();
     }, []);
 
+
+
     async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault(); // Previne o comportamento padrão do formulário
 
@@ -62,10 +64,13 @@ export default function UserCourse({ params }: Props) {
                 }
             });
 
-            router.push(`/adm/${decodedId}`);
+
         } catch (err) {
             console.log("error: ", err);
         }
+
+        console.log("courseid enviado:", select)
+        console.log("userid:", decodedId)
 
         router.push(`/adm/${decodedId}`);
     }
