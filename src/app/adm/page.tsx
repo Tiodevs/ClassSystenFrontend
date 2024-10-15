@@ -76,6 +76,29 @@ export default function Adm() {
     }
   };
 
+  async function handleDeleteLesson(lesson: any) {
+    console.log(lesson)
+
+    const token = getCookiesClient()
+
+    await api.delete("/course/lesson", {
+        params: {
+          lesson_id: lesson
+        },
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .catch((err)=>{
+        console.log(err)
+        return
+    })
+
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000); // Recarrega a página após 2 segundos
+}
+
   return (
     <div>
       <Header />
@@ -160,7 +183,7 @@ export default function Adm() {
                       <h2>{lesson.title}</h2>
                     </div>
                     <div className={styles.btns}>
-                      <Trash size={24} color="#01C790" />
+                      <Trash size={24} color="#01C790" onClick={() => handleDeleteLesson(lesson.id)} className={styles.btndelete}/>
                     </div>
                   </div>
                 ))}
