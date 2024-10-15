@@ -32,7 +32,6 @@ export function Button({ name, user_id }: Props) {
   }
 
   return (
-
     <button onClick={() => editUser(user_id)} disabled={pending} className={styles.button}>
       {!name ? <LockKeyhole size={24} color="#FF0B0B" /> : <Check size={24} color="#01C790" />}
     </button>

@@ -6,9 +6,11 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
 import { handleRegister } from "./actions/serverActions"; // Importa a função do servidor
+import { InstagramIcon, Smartphone, Linkedin } from 'lucide-react'
 
 export default function Home() {
   const [error, setError] = useState<string | null>(null); // Para capturar erros no cliente
+  const [loading, setLoading] = useState<boolean>(false); // Para capturar erros no cliente
 
   async function onSubmit(formData: FormData) {
     try {
@@ -17,49 +19,56 @@ export default function Home() {
       window.location.href = "/course";
     } catch (err: any) {
       setError("Login ou senha incorretos, tente novamente"); // Captura o erro e atualiza o estado
+      toast.warning(error); // Captura o erro e atualiza o estado
     }
+    setLoading(!loading)
   }
 
-  // Exibe o toast de erro no cliente
-  if (error) {
-    toast.warning(error);
-  }
 
   return (
     <>
       <div className={styles.containerCenter}>
-        <Image
-          src={"/logo.svg"}
-          alt="Logo da empresa"
-          className={styles.logo}
-          width={10}
-          height={80}
-          priority
-        />
 
         <section className={styles.login}>
-          <h1 className={styles.titleLogin}>Login</h1>
+          <div className={styles.esquerda}>
+            <div>
+              <h1>Login</h1>
+              <p>Bem-vindo ao <span>plataforma do Teacher Manny</span></p>
+              <p>Qualquer duvida entre em <span>contato</span></p>
+              <div>
+                <InstagramIcon size={25} color="#01DEB2" />
+                <Smartphone size={25} color="#01DEB2" />
+                <Linkedin size={25} color="#01DEB2" />
+              </div>
+            </div>
+            <p>© 2024 Felipe Santos</p>
+          </div>
           <form action={onSubmit}>
-            <input
-              type="email"
-              required
-              name="email"
-              placeholder="Email"
-              className={styles.input}
-            />
+            <div>
 
-            <input
-              type="password"
-              required
-              name="password"
-              placeholder="Senha"
-              className={styles.input}
-            />
+              <p>Email</p>
+              <input
+                type="email"
+                required
+                name="email"
+                className={styles.input}
+              />
+            </div>
+            <div>
+              <p>Senha</p>
+              <input
+                type="password"
+                required
+                name="password"
+                className={styles.input}
+              />
+            </div>
 
-            <button type="submit">Entrar</button>
+            <button type="submit">{!loading ? "ENTRAR" : "CARREGANDO..."}</button>
+
           </form>
 
-          {error ? <p className={styles.error}>{error}</p>: <></>}
+          {error ? <p className={styles.error}>{error}</p> : <></>}
         </section>
       </div>
     </>

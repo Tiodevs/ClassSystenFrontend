@@ -3,8 +3,8 @@ import "./globals.scss";
 import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
-  title: "FoodSysten",
-  description: "Sistema de gestão de pedidos",
+  title: "ClassSysten",
+  description: "Plataforma de aulas particulares",
 };
 
 export default function RootLayout({

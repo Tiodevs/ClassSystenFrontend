@@ -1,0 +1,29 @@
+.main{
+    padding: 100px 150px;
+    min-height: calc(100vh - 98px);
+
+    a{
+        text-decoration: none;
+        color: #FFFF;
+    }
+}
+
+.content{
+    display: flex;
+    gap: 25px;
+    margin-top: 50px;
+}
+
+@media (max-width: 800px){
+    .main{
+        padding: 100px 40px;
+
+    }
+  }
+
+  @media (max-width: 570px){
+    .main{
+        padding: 50px 16px;
+
+    }
+  }
