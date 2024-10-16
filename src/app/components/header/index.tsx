@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 import { usePathname } from "next/navigation";
 // import logoImg from '/public/Logo.svg'
-import { LogOutIcon, BookOpen, CalendarDays } from 'lucide-react'
+import { LogOutIcon,SlidersVertical , BookOpen, CalendarDays, LayoutDashboard, Gamepad } from 'lucide-react'
 import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -15,8 +15,16 @@ import { getCookiesClient } from '@/lib/cookieClient';
 import { api } from '@/app/services/api';
 import { useEffect, useState } from 'react';
 
+
+interface User {
+  name: string;
+  email: string;
+  adm: boolean;
+  photourl: string;
+}
+
 export function Header() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [urlUser, setUrlUser] = useState("");
   const [isactive, setIsactive] = useState(false);
 
@@ -38,28 +46,24 @@ export function Header() {
     const token = getCookiesClient();
 
     async function getUser() {
-      const response = await api.get("/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const responseUrl = await api.get("/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const resListUsers = responseUrl.data
-
-      const usersURL = resListUsers.filter((item: any) => item.id === response.data.id)
-
-      setUrlUser(usersURL[0].photourl)
-      setUser(response.data); // Atualizamos o estado com os dados do usuário
+      try {
+        const response = await api.get("/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUrlUser(response.data.photourl);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar o usuário:", error);
+        handleLogout(); // Redireciona se houver erro
+      }
     }
 
     getUser();
   }, []);
+
+  if(user){
+    console.log(user.adm)
+  }
 
   return (
     <header className={styles.headerContainer}>
@@ -84,6 +88,14 @@ export function Header() {
         <nav className={`${isactive ? styles.isactive : ""} ${styles.navmobi}`}>
 
           <div className={styles.navlink}>
+
+            <Link className={isActive("/dashboard") ? styles.active : styles.link} href="/dashboard">
+              <LayoutDashboard size={24} color='#FFFF' />
+            </Link>
+
+            <Link className={isActive("/game") ? styles.active : styles.link} href="/game">
+              <Gamepad size={24} color='#FFFF' />
+            </Link>
 
             <Link className={isActive("/course") ? styles.active : styles.link} href="/course">
               <BookOpen size={24} color='#FFFF' />
@@ -116,6 +128,20 @@ export function Header() {
         </nav>
 
         <nav className={styles.nav}>
+
+
+        {user && user.adm && <Link className={isActive("/adm") ? styles.active : styles.link} href="/adm">
+            <SlidersVertical size={24} color='#FFFF' />
+          </Link>}
+
+          <Link className={isActive("/dashboard") ? styles.active : styles.link} href="/dashboard">
+            <LayoutDashboard size={24} color='#FFFF' />
+          </Link>
+
+          <Link className={isActive("/game") ? styles.active : styles.link} href="/game">
+              <Gamepad size={24} color='#FFFF' />
+            </Link>
+            
           <Link className={isActive("/course") ? styles.active : styles.link} href="/course">
             <BookOpen size={24} color="#121C2C" />
           </Link>
