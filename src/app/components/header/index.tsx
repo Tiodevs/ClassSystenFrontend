@@ -61,9 +61,9 @@ export function Header() {
     getUser();
   }, []);
 
-  if(user){
-    console.log(user.adm)
-  }
+  // if(user){
+  //   console.log(user)
+  // }
 
   return (
     <header className={styles.headerContainer}>

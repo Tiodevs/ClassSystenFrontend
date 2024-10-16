@@ -19,11 +19,19 @@ interface Course {
     lessons: any
 }
 
+interface User {
+    name: string;
+    email: string;
+    adm: boolean;
+    photourl: string;
+    Streak: any
+}
+
 export default function Dashboard() {
 
     const [coursesProgress, setCoursesProgress] = useState([]);
-    const [loading, setloading] = useState(true)
-    const [loading2, setloading2] = useState(false)
+    const [user, setUser] = useState<User | null>(null);
+
 
     useEffect(() => {
 
@@ -36,6 +44,8 @@ export default function Dashboard() {
                     Authorization: `Bearer ${token}`,
                 },
             });
+
+            setUser(getUserId.data)
 
             // Pega apenas os cursos do usuario
             const getCursesByUser = await api.post("/users/courseid", {
@@ -67,7 +77,7 @@ export default function Dashboard() {
             console.log("Progresso dos cursos:", coursesWithProgress);
 
             setCoursesProgress(coursesWithProgress);
-            setloading(false);
+
 
         }
 
@@ -92,12 +102,26 @@ export default function Dashboard() {
 
                     {coursesProgress.map((course: any) => (
                         <div className={styles.card}>
-                            <p>Quantidades de aulas assitiadas do<br/>curso: <span>{course.courseName}</span></p>
+                            <p>Quantidades de aulas assitiadas do<br />curso: <span>{course.courseName}</span></p>
                             <h2 key={course.courseName}>
                                 {course.completedLessons}/{course.totalLessons}
                             </h2>
                         </div>
                     ))}
+
+                    <div className={styles.card}>
+                        {user && <div>
+                            <p>Sua ofensiva atual</p>
+                            <h2>{user.Streak[0].currentStreak}</h2>
+                        </div>}
+                    </div>
+                    <div className={styles.card}>
+                        {user && <div>
+                            <p>Seu record de ofensiva</p>
+                            <h2>{user.Streak[0].maxStreak}</h2>
+                        </div>}
+                    </div>
+
                 </div>
 
 
