@@ -15,7 +15,7 @@ interface Props {
   userId?: string, // Função opcional
 }
 
-export function Button2({ name, event, courseid, userId  }: Props) {
+export function Button2({ name, event, courseid, userId }: Props) {
   const { pending } = useFormStatus();
 
   const router = useRouter();
@@ -42,7 +42,13 @@ export function Button2({ name, event, courseid, userId  }: Props) {
       case 6:
         router.back();
         break;
-      
+      case 7:
+        router.push(`/game/flashcard/`);
+        break;
+      case 8:
+        router.push(`/game/jogodamemoria/`);
+        break;
+
       default:
         console.warn("Evento desconhecido");
     }

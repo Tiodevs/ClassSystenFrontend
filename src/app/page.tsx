@@ -16,7 +16,7 @@ export default function Home() {
     try {
       await handleRegister(formData); // Chama a função do servidor
       // Se tudo ocorrer bem, redirecione para o dashboard
-      window.location.href = "/course";
+      window.location.href = "/dashboard";
     } catch (err: any) {
       setError("Login ou senha incorretos, tente novamente"); // Captura o erro e atualiza o estado
       toast.warning(error); // Captura o erro e atualiza o estado
