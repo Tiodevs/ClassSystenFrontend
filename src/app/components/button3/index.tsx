@@ -3,10 +3,9 @@
 import styles from './styles.module.scss'
 import { useFormStatus } from 'react-dom'
 
-import { LockKeyhole, Check, X } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { api } from '@/app/services/api'
 import { getCookiesClient } from '@/lib/cookieClient'
-import { useState, useEffect } from 'react'
 
 interface Props {
   user_id: string,
@@ -19,8 +18,6 @@ export function Button3({ user_id, progress, lesson_id }: Props) {
 
   const filterProgress = progress.filter((item: any) => item.userId === user_id)
 
-  console.log("user?" , user_id)
-  console.log("progess?" , progress)
   async function editProgress() {
     const token = getCookiesClient()
 
@@ -31,6 +28,30 @@ export function Button3({ user_id, progress, lesson_id }: Props) {
         Authorization: `Bearer ${token}`
       }
     });
+
+    const user = await api.get("/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    console.log(user.data.Streak)
+
+    if(user.data.Streak?.length > 0){
+      await api.put('/user/streak', {
+        userId: user_id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } else{
+      await api.post('/user/streak', {
+        user_id: user_id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
 
     // Atualiza a página após a requisição ser completada
     window.location.reload();
@@ -50,6 +71,28 @@ export function Button3({ user_id, progress, lesson_id }: Props) {
         Authorization: `Bearer ${token}`
       }
     });
+
+    const user = await api.get("/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if(user.data.Streak?.length > 0){
+      await api.put('/user/streak', {
+        userId: user_id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } else{
+      await api.post('/user/streak', {
+        user_id: user_id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
 
     // Atualiza a página após a requisição ser completada
     window.location.reload();

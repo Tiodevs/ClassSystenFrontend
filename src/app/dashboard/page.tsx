@@ -24,7 +24,10 @@ interface User {
     email: string;
     adm: boolean;
     photourl: string;
-    Streak: any
+    Streak: Array<{
+        currentStreak: number;
+        maxStreak: number;
+    }>
 }
 
 export default function Dashboard() {
@@ -101,7 +104,7 @@ export default function Dashboard() {
                 <div className={styles.content}>
 
                     {coursesProgress.map((course: any) => (
-                        <div className={styles.card}>
+                        <div key={course.id} className={styles.card}>
                             <p>Quantidades de aulas assitiadas do<br />curso: <span>{course.courseName}</span></p>
                             <h2 key={course.courseName}>
                                 {course.completedLessons}/{course.totalLessons}
@@ -110,16 +113,24 @@ export default function Dashboard() {
                     ))}
 
                     <div className={styles.card}>
-                        {user && <div>
-                            <p>Sua ofensiva atual</p>
-                            <h2>{user.Streak[0].currentStreak}</h2>
-                        </div>}
+                        {user && user.Streak?.length > 0 ? (
+                            <div>
+                                <p>Sua ofensiva atual</p>
+                                <h2>{user.Streak[0].currentStreak}</h2>
+                            </div>
+                        ) : (
+                            <p>Você ainda não iniciou uma ofensiva.</p>
+                        )}
                     </div>
                     <div className={styles.card}>
-                        {user && <div>
-                            <p>Seu record de ofensiva</p>
-                            <h2>{user.Streak[0].maxStreak}</h2>
-                        </div>}
+                        {user && user.Streak?.length > 0 ? (
+                            <div>
+                                <p>Seu recorde de ofensiva</p>
+                                <h2>{user.Streak[0].maxStreak}</h2>
+                            </div>
+                        ) : (
+                            <p>Nenhum recorde de ofensiva encontrado.</p>
+                        )}
                     </div>
 
                 </div>
