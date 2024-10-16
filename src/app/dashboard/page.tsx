@@ -21,7 +21,7 @@ interface Course {
 
 export default function Dashboard() {
 
-    const [courses, setCourses] = useState([])
+    const [coursesProgress, setCoursesProgress] = useState([]);
     const [loading, setloading] = useState(true)
     const [loading2, setloading2] = useState(false)
 
@@ -30,49 +30,12 @@ export default function Dashboard() {
         async function getCurses() {
             const token = getCookiesClient()
 
-            // Pega todos os cursos
-            const responseCourses = await api.get<Course[]>("/course", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-
-            const resCategories: Course[] = responseCourses.data
-
-            // Filtra apenas os cursos ativos
-            const activeCourses = resCategories.filter(
-                (course: Course) => course.active
-            );
-
             // Pega o user atual
             const getUserId = await api.get("/me", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
-            const userId = getUserId.data.id;
-
-            // Pega todos os users do sistema
-            const userActive = await api.get("/users", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-
-            const resUserActive = userActive.data
-
-            // Deixa apenas os users ativos
-            const filterUserActive = resUserActive.filter((item: any) => item.active === true)
-
-
-            // Verifica se ele está ativo se tiver salva ele
-            const user  = filterUserActive.filter((item: any) => item.id === getUserId.data.id)
-            console.log("Usuario atual autenticado: ", user)
-
-            if (user.length === 0) {
-                redirect("/")
-            }
 
             // Pega apenas os cursos do usuario
             const getCursesByUser = await api.post("/users/courseid", {
@@ -85,31 +48,31 @@ export default function Dashboard() {
 
             const CursesByUser = getCursesByUser.data
 
-            console.log("Cursos do user atual: ", CursesByUser)
+            console.log(CursesByUser)
 
-            let allfiltersCourses = CursesByUser.map((item: any) =>
-                activeCourses.filter((a: any) => a.id === item.courseId)
-            );
+            // Conta a quantidade de lições e lições completadas de cada curso
+            const coursesWithProgress = CursesByUser.map((course: any) => {
+                const totalLessons = course.course.lessons.length;
+                const completedLessons = course.course.lessons.filter((lesson: any) =>
+                    lesson.progress.some((p: any) => p.completed === true && p.userId === getUserId.data.id)
+                ).length;
 
-            console.log("Teste:", allfiltersCourses)
+                return {
+                    courseName: course.course.name,
+                    totalLessons,
+                    completedLessons,
+                };
+            });
 
-            // Extrai nome e quantidade de aulas de cada curso
-            const courseSummaries = allfiltersCourses.flatMap((courseArray: any) =>
-                courseArray.map((course: any) => ({
-                    name: course.name,
-                    lessonCount: course.lessons.length
-                }))
-            );
+            console.log("Progresso dos cursos:", coursesWithProgress);
 
-            console.log("aopa:", courseSummaries)
-
-            setCourses(allfiltersCourses)
+            setCoursesProgress(coursesWithProgress);
+            setloading(false);
 
         }
 
         getCurses()
 
-        setloading(false)
 
 
     }, []);
@@ -123,6 +86,20 @@ export default function Dashboard() {
                     name01="Veja aqui o seu progresso e avisos do curso"
                     name02="dashboard"
                 />
+
+
+                <div className={styles.content}>
+
+                    {coursesProgress.map((course: any) => (
+                        <div className={styles.card}>
+                            <p>Quantidades de aulas assitiadas do<br/>curso: <span>{course.courseName}</span></p>
+                            <h2 key={course.courseName}>
+                                {course.completedLessons}/{course.totalLessons}
+                            </h2>
+                        </div>
+                    ))}
+                </div>
+
 
             </main>
         </div>

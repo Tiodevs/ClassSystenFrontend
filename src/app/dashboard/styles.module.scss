@@ -13,58 +13,38 @@
     gap: 25px;
     margin-top: 68px;
 
-    .banner {
-        object-fit: fill;
-        border-radius: 8px !important;
-    }
-
-    .logo {
-        border-radius: 16px;
-    }
-
     div {
         background-color: var(--cinza);
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         flex-direction: column;
         border-radius: 8px;
+        text-align: center;
 
-        padding: 22px 22px;
+        gap: 10px;
 
-        h1 {
-            font-size: 24px;
-            color: #202125;
+        padding: 34px 34px 27px 34px;
+
+        h2 {
+            font-size: 50px;
+            color: var(--textbranco);
+            font-family: "Bebas Neue", sans-serif;
+            font-weight: lighter;
+            height: auto;
         }
 
         p {
-            font-size: 16px;
-            color: #8F8F8F;
+            font-size: 17px;
+            color: var(--textcinza);
+
+            span{
+                font-weight: bolder;
+            }
         }
     }
 }
 
-.btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 24px;
-    padding: 16px 27px;
-
-    background-color: var(--main);
-    color: #202125 !important;
-    border: none;
-    border-radius: 100px;
-    font-weight: bold;
-}
-
-.btn * {
-    color: #202125;
-}
-
-.loading {
-    color: #F2F2F2;
-    font-size: 16px;
-}
 
 @media (max-width: 800px) {
     .main {
