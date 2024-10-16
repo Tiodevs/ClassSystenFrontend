@@ -20,22 +20,31 @@ export default function UserCourse({ params }: Props) {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [courses, setCourses] = useState<any[]>([]);
-    const [select, setSelect] = useState("teste");
+    const [select, setSelect] = useState("");
 
     useEffect(() => {
         const fetchCourses = async () => {
-            const token = getCookiesClient(); // Lembre-se de obter o token antes de fazer a requisição
-
-            const response = await api.get("/course", {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            try {
+                const token = getCookiesClient();
+                if (!token) throw new Error("Token não encontrado");
+    
+                const response = await api.get("/course", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+    
+                const resCourses = response.data;
+                setCourses(resCourses);
+    
+                if (resCourses.length > 0) {
+                    setSelect(resCourses[0].id); // Define o primeiro curso como selecionado
                 }
-            });
-
-            const resCourses = response.data;
-            setCourses(resCourses);
+            } catch (err) {
+                console.error("Erro ao buscar cursos:", err);
+            }
         };
-
+    
         fetchCourses();
     }, []);
 
@@ -47,6 +56,7 @@ export default function UserCourse({ params }: Props) {
         setLoading(true);
 
         if (!select) {
+            console.log()
             console.log("Por favor, selecione um curso");
             setLoading(false);
             return;
@@ -64,9 +74,14 @@ export default function UserCourse({ params }: Props) {
                 }
             });
 
-
+            router.push(`/adm/${decodedId}`);
         } catch (err) {
-            console.log("error: ", err);
+            console.log("decodedId: ", decodedId)
+            console.log("select: ", select)
+            console.error("Erro ao registrar curso:", err);
+            alert("Não foi possível registrar o curso. Tente novamente.");
+        } finally {
+            setLoading(false);
         }
 
         console.log("courseid enviado:", select)

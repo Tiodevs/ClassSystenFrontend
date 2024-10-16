@@ -1,5 +1,5 @@
 .container{
-  background-color: #FFFF;
+  background-color: var(--cinza);
   width: 100%;
   padding: 3px 30px;
   border-radius: 16px;
@@ -11,6 +11,7 @@
 
   h2{
     font-size: 18px;
+    color: var(--textbranco);
   }
 
   .iconevent{
@@ -31,7 +32,7 @@
     gap: 13px;
     width: 100%;
     padding: 20px 0px;
-    border-bottom: solid 2px #DFDFDF;
+    border-bottom: solid 1px #484848;
   }
 
   .event:last-child{
