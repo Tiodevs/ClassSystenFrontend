@@ -84,9 +84,6 @@ export default function UserCourse({ params }: Props) {
             setLoading(false);
         }
 
-        console.log("courseid enviado:", select)
-        console.log("userid:", decodedId)
-
         router.push(`/adm/${decodedId}`);
     }
 

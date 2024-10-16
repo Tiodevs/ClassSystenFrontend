@@ -62,13 +62,10 @@ export function Button3({ user_id, progress, lesson_id }: Props) {
       {filterProgress.length === 0 ?
         <button onClick={() => createProgress()} disabled={pending} className={styles.button}>
           MARCAR COMO FEITO
-          <LockKeyhole size={24} color="#FF0B0B" className={styles.icon}/>
         </button>
-        : filterProgress[0].completed ?
+        : !filterProgress[0].completed ?
         <button onClick={() => editProgress()} disabled={pending} className={styles.button}>
           MARCAR COMO FEITO
-          <X size={24} color="#FF0B0B" className={styles.icon}/>
-          
         </button>
         : <button onClick={() => editProgress()} disabled={pending} className={styles.button}>
   
